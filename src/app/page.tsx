@@ -2,13 +2,13 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button'; // Import Button from Shadcn/UI
+import { Button } from '@/components/ui/button'; 
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import { GripVertical, Image, Heading as ButtonIconComponent, XCircle, CheckCircle, AlertTriangle, LayoutDashboard, File } from 'lucide-react'; // Renamed to ButtonIconComponent
+import { GripVertical, Image, Heading as ButtonIconComponent, XCircle, CheckCircle, AlertTriangle, LayoutDashboard, File } from 'lucide-react'; 
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 // ===============================
@@ -25,16 +25,16 @@ interface DragElement {
     height?: number;
     color?: string;
     fontSize?: number;
-    fontFamily?: string;  // Added font
-    fontWeight?: number; // Added font weight
-    buttonType?: 'default' | 'outline' | 'secondary'; // Added for button styling
-    backgroundColor?: string; // Added background color
-    border?: string;       //Added border
+    fontFamily?: string; 
+    fontWeight?: number; 
+    buttonType?: 'default' | 'outline' | 'secondary'; 
+    backgroundColor?: string; 
+    border?: string;       
     borderRadius?: number;
     padding?: string;
     margin?: string;
     align?: 'left' | 'center' | 'right';
-    children?: string[]; // For container
+    children?: string[]; 
 }
 
 type FormConfig = {
@@ -42,7 +42,7 @@ type FormConfig = {
         label: string;
         type: 'text' | 'textarea' | 'number' | 'select' | 'color' | 'border';
         value: any;
-        options?: string[]; // For select dropdown
+        options?: string[];
     };
 };
 
@@ -64,7 +64,7 @@ const ELEMENT_TYPES = [
     { type: 'text', label: 'Text', icon: <p className="w-4 h-4" /> },
     { type: 'heading', label: 'Heading', icon: <h1 className="w-4 h-4" /> },
     { type: 'image', label: 'Image', icon: <Image className="w-4 h-4" /> },
-    { type: 'button', label: 'Button', icon: <ButtonIconComponent className="w-4 h-4" /> }, // Use the renamed import
+    { type: 'button', label: 'Button', icon: <ButtonIconComponent className="w-4 h-4" /> }, 
     { type: 'container', label: 'Container', icon: <LayoutDashboard className="w-4 h-4" /> },
 ];
 
@@ -149,7 +149,7 @@ const getFormConfig = (element: DragElement): FormConfig => {
                     value: element.buttonType || 'default',
                     options: ['default', 'outline', 'secondary'],
                 },
-                color: { label: 'Text Color', type: 'color', value: element.color || '#ffffff' }, // Added color for button
+                color: { label: 'Text Color', type: 'color', value: element.color || '#ffffff' },
                 backgroundColor: { label: 'Background Color', type: 'color', value: element.backgroundColor || '#007bff' }
             };
         case 'container':
@@ -227,9 +227,9 @@ const WebsiteBuilder = () => {
     const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
     const [formConfig, setFormConfig] = useState<FormConfig | null>(null);
     const [isDragging, setIsDragging] = useState(false);
-    const [error, setError] = useState<string | null>(null); // State for error messages
+    const [error, setError] = useState<string | null>(null);
     const [showTutorial, setShowTutorial] = useState(true);
-    const [activeSection, setActiveSection] = useState<'builder' | 'pages'>('builder'); // 'builder' or 'pages'
+    const [activeSection, setActiveSection] = useState<'builder' | 'pages'>('builder');
 
     // ===============================
     // Refs
@@ -287,7 +287,7 @@ const WebsiteBuilder = () => {
         if (element) {
             setFormConfig(getFormConfig(element));
         } else {
-            setFormConfig(null); // Clear form if no element is found
+            setFormConfig(null);
         }
     };
 
@@ -297,7 +297,7 @@ const WebsiteBuilder = () => {
                 el.id === selectedElementId ? { ...el, [key]: value } : el
             )
         );
-        // Update formConfig immediately
+        
         if (selectedElementId && formConfig) {
             setFormConfig(prevConfig => {
                 const newConfig = { ...prevConfig };
@@ -312,11 +312,11 @@ const WebsiteBuilder = () => {
     const handleAddElement = (type: DragElement['type']) => {
         try {
             const newElement = createNewElement(type);
-            const id = crypto.randomUUID(); // Generate unique ID
+            const id = crypto.randomUUID();
             setElements((prevElements) => [...prevElements, { ...newElement, id }]);
-            setSelectedElementId(id); // Optionally select the new element
+            setSelectedElementId(id); 
         } catch (error: any) {
-            setError(`Failed to add element: ${error.message}`); // Set error message
+            setError(`Failed to add element: ${error.message}`);
         }
     };
 
@@ -326,7 +326,7 @@ const WebsiteBuilder = () => {
         setFormConfig(null);
     };
 
-    // Update element position when dragged
+    
     useEffect(() => {
         if (draggedElement) {
             const element = elements.find((el) => el.id === draggedElement);
@@ -418,17 +418,15 @@ const WebsiteBuilder = () => {
                             })}
                         </div>
                     )}
-                    {/* Drag handle */}
                     <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 cursor-move opacity-50 group-hover:opacity-100 transition-opacity">
                         <GripVertical className="w-4 h-4 text-gray-500" />
                     </div>
-                    {/* Delete button */}
                     {isSelected && (
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={(e) => {
-                                e.stopPropagation(); // Prevent element selection
+                                e.stopPropagation();
                                 deleteElement(element.id);
                             }}
                             className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-red-500/20 text-red-500 hover:bg-red-500/30 hover:text-red-400 transition-all duration-200"
@@ -442,16 +440,16 @@ const WebsiteBuilder = () => {
     };
 
     const loadPremadeComponent = (component: { name: string; elements: DragElement[] }) => {
-        // Generate new IDs for the elements to avoid conflicts
+        
         const newElements = component.elements.map(el => ({ ...el, id: crypto.randomUUID() }));
         setElements(prevElements => [...prevElements, ...newElements]);
-        // Switch to the builder view after loading
+    
         setActiveSection('builder');
     };
 
     return (
         <div className="flex h-screen bg-gray-100">
-            {/* Sidebar */}
+        
             <aside className="w-64 bg-white shadow-md p-4 space-y-4">
                 <h2 className="text-lg font-semibold">Sections</h2>
                 <div className="space-y-2">
@@ -511,18 +509,18 @@ const WebsiteBuilder = () => {
                 )}
             </aside>
 
-            {/* Main Content Area */}
+            
             <main className="flex-1 p-4 overflow-auto relative">
                 <div
                     ref={containerRef}
                     className="w-full h-full bg-gray-200 border border-gray-300 rounded-md relative overflow-hidden"
                 >
-                    {/* Render Elements */}
+                    
                     {elements.map(renderElement)}
                 </div>
             </main>
 
-            {/* Element Form */}
+            
             {selectedElementId && (
                 <aside className="w-72 bg-white shadow-md p-4 space-y-4">
                     <h2 className="text-lg font-semibold">Edit Element</h2>
@@ -592,7 +590,6 @@ const WebsiteBuilder = () => {
                 </aside>
             )}
 
-            {/* Error Message Dialog */}
             <Dialog open={!!error} onOpenChange={() => setError(null)}>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
@@ -609,7 +606,6 @@ const WebsiteBuilder = () => {
                 </DialogContent>
             </Dialog>
 
-            {/* Tutorial Dialog */}
             <Dialog open={showTutorial} onOpenChange={setShowTutorial}>
                 <DialogContent className="sm:max-w-[600px]">
                     <DialogHeader>
